@@ -1,0 +1,88 @@
+/* Ohio page additions on top of ../styles.css */
+
+.hero {
+  --team: #8f1d21;
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  flex: none;
+}
+
+.hero-badge {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  background: #fff;
+  color: #8f1d21;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  flex: none;
+}
+
+.banner {
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--even-bg);
+  color: var(--even);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.path td:nth-child(2) {
+  white-space: normal;
+  min-width: 180px;
+}
+
+.opp-alt {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.root {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.root strong {
+  color: var(--ink);
+}
+
+.region-odds {
+  margin-top: 16px;
+}
+
+.round-g .match.empty {
+  visibility: hidden;
+}
+
+.oos {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.poll .c-seed {
+  width: 58px;
+}
+
+@media (max-width: 480px) {
+  .topbar .brand {
+    display: none;
+  }
+}
