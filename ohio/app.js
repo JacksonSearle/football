@@ -60,7 +60,26 @@ function initials(name) {
   const words = name.replace(/\(.*?\)|\[.*?\]/g, '').split(/[\s-]+/).filter((w) => /^[A-Za-z]/.test(w));
   return (words.length > 1 ? words.slice(0, 2).map((w) => w[0]) : [words[0]?.slice(0, 2) || '?']).join('').toUpperCase();
 }
-const badge = (key, cls = 'badge') => `<span class="${cls}" aria-hidden="true">${esc(initials(nameOf(key)))}</span>`;
+// Logos and colors for teams we have them for, keyed by Joe Eitel's team id.
+const TEAM_STYLE = {
+  184: { logo: 'logos/bellbrook.png', color: 'c3b1e1' }, // Bellbrook
+};
+
+function textOn(hex) {
+  const n = parseInt(hex, 16);
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
+    const v = c / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.4 ? '#111418' : '#ffffff';
+}
+
+const badge = (key, cls = 'badge') => {
+  const logo = TEAM_STYLE[key]?.logo;
+  return logo
+    ? `<img class="${cls} logo-img" src="${esc(logo)}" alt="" loading="lazy" />`
+    : `<span class="${cls}" aria-hidden="true">${esc(initials(nameOf(key)))}</span>`;
+};
 function teamLink(key) {
   const t = team(key);
   const inner = `${badge(key)}<span class="tname">${esc(t ? t.name : nameOf(key))}</span>`;
@@ -183,6 +202,7 @@ function renderHero() {
   const el = $('hero');
   if (!state.selected) {
     el.className = 'hero hero-empty';
+    el.style.cssText = '';
     el.innerHTML = `<div><h1>Pick a Division III team</h1>
       <p>See its title odds, who it probably plays next, and which games to root for.</p>
       <button class="btn btn-solid" type="button" data-action="pick">Choose your team</button></div>`;
@@ -195,7 +215,9 @@ function renderHero() {
   const followed = state.favorites.includes(key);
   const tile = (label, value, sub = '') => `<div class="tile"><div class="tile-v">${value}</div><div class="tile-l">${label}</div>${sub ? `<div class="tile-s">${sub}</div>` : ''}</div>`;
   const powerRank = d3ByRating().indexOf(key) + 1;
+  const color = TEAM_STYLE[key]?.color;
   el.className = 'hero';
+  el.style.cssText = color ? `--team:#${color};--on-team:${textOn(color)}` : '';
   el.innerHTML = `
     <div class="hero-id">
       ${badge(key, 'hero-badge')}
@@ -424,7 +446,7 @@ function renderBracket() {
   $('bracket').innerHTML = `
     <div class="card-head"><h2>Division III bracket</h2>
       <p>Real results where games are final; everywhere else the favorite advances. Seeds are the final unofficial Harbin rankings.</p></div>
-    <div class="champ"><span class="hero-badge" style="width:44px;height:44px;font-size:16px;border-radius:12px">${esc(initials(nameOf(keyAt(champ))))}</span>
+    <div class="champ">${badge(keyAt(champ), 'hero-badge champ-badge')}
       <div><span class="sub">Projected state champion</span><strong>${esc(nameOf(keyAt(champ)))}</strong><span class="sub">${pct(champOdds)} title chance</span></div></div>
     <div class="tabs">${tabs.map((t) => `<button type="button" class="tab ${t.id === tab ? 'on' : ''}" data-btab="${t.id}">${t.label}</button>`).join('')}</div>
     ${body}`;

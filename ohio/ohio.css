@@ -86,3 +86,23 @@
     display: none;
   }
 }
+
+img.logo-img {
+  object-fit: contain;
+  background: #fff;
+}
+
+img.hero-badge {
+  padding: 6px;
+}
+
+.champ-badge {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+img.champ-badge {
+  padding: 3px;
+}
